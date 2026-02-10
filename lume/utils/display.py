@@ -24,11 +24,13 @@ class Display:
         """Display Lume banner"""
         banner = f"""
 {self.COLORS['cyan']}{self.COLORS['bold']}
-╦  ╦ ╦╔╦╗╔═╗
-║  ║ ║║║║║╣ 
-╩═╝╚═╝╩ ╩╚═╝
-{self.COLORS['reset']}{self.COLORS['cyan']}Security Toolkit v0.1.0
-Think in English. Hack in Kali.{self.COLORS['reset']}
+╦  ╦ ╦╔╦╗╔═╗  ╔═╗┌─┐┌─┐┬ ┬┬─┐┬┌┬┐┬ ┬  ╔╦╗┌─┐┌─┐┬  ┬┌─┬┌┬┐
+║  ║ ║║║║║╣   ╚═╗├┤ │  │ │├┬┘│ │ └┬┘   ║ │ ││ ││  ├┴┐│ │ 
+╩═╝╚═╝╩ ╩╚═╝  ╚═╝└─┘└─┘└─┘┴└─┴ ┴  ┴    ╩ └─┘└─┘┴─┘┴ ┴┴ ┴ 
+{self.COLORS['reset']}
+{self.COLORS['green']}                    Version 0.2.0 - Production Ready{self.COLORS['reset']}
+{self.COLORS['yellow']}              Think in English. Hack in Kali.{self.COLORS['reset']}
+{self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
 """
         print(banner)
     
