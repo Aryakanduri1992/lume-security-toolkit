@@ -1,0 +1,218 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                  🔦 LUME SECURITY TOOLKIT 🔦                                 ║
+║                                                                              ║
+║              Installation Options for Kali Linux                            ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+You have THREE options to get Lume on your Kali Linux machine:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ OPTION 1: ONE-COMMAND BOOTSTRAP INSTALLER (Recommended)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This creates the entire project from scratch on your Kali machine.
+
+STEP 1: Upload bootstrap.sh to a web server or GitHub
+
+STEP 2: On your Kali Linux, run:
+
+    curl -sSL https://your-url.com/bootstrap.sh | bash
+
+    OR if you have it locally:
+
+    bash bootstrap.sh
+
+What it does:
+  ✓ Checks Python, pip, git
+  ✓ Creates entire project structure
+  ✓ Creates all Python files
+  ✓ Creates rules.json
+  ✓ Installs Lume
+  ✓ Verifies installation
+  ✓ Checks pentesting tools
+
+Time: ~2 minutes
+Difficulty: ⭐ (Easiest)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 OPTION 2: CLONE FROM GITHUB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: Push project to GitHub (from your current machine)
+
+    cd lume_security_toolkit
+    git init
+    git add .
+    git commit -m "Initial commit"
+    git remote add origin https://github.com/YOUR_USERNAME/lume-security-toolkit.git
+    git push -u origin main
+
+STEP 2: Clone on Kali Linux
+
+    git clone https://github.com/YOUR_USERNAME/lume-security-toolkit.git
+    cd lume-security-toolkit
+    sudo pip3 install -e .
+    lume --version
+
+Time: ~1 minute
+Difficulty: ⭐⭐ (Easy)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💾 OPTION 3: MANUAL FILE TRANSFER (SCP/USB)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: On your current machine, compress the project
+
+    tar -czf lume.tar.gz lume_security_toolkit/
+
+STEP 2: Transfer to Kali
+
+    Method A - SCP (if you have network access):
+    scp lume.tar.gz kali@192.168.1.100:~/
+
+    Method B - USB Drive:
+    Copy lume.tar.gz to USB, then plug into Kali
+
+STEP 3: On Kali Linux, extract and install
+
+    tar -xzf lume.tar.gz
+    cd lume_security_toolkit
+    sudo pip3 install -e .
+    lume --version
+
+Time: ~3 minutes
+Difficulty: ⭐⭐⭐ (Medium)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 PREREQUISITES (All Options)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+On your Kali Linux, ensure you have:
+
+1. Python 3.8+
+   python3 --version
+
+2. pip3
+   pip3 --version
+
+3. git (for Options 1 & 2)
+   git --version
+
+If missing, install:
+   sudo apt update
+   sudo apt install python3 python3-pip git -y
+
+4. Pentesting tools (optional but recommended)
+   sudo apt install nmap gobuster nikto sqlmap hydra metasploit-framework whatweb -y
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFY INSTALLATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After installation, run these commands:
+
+1. Check version
+   lume --version
+
+2. List tools
+   lume --list-tools
+
+3. Test with dry-run (safe)
+   lume --dry-run "scan ports on 192.168.1.1"
+
+4. Real test (authorized target)
+   lume "scan ports on scanme.nmap.org"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 QUICK START COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Once installed:
+
+# Port scanning
+lume "scan ports on 192.168.1.1"
+
+# Directory enumeration
+lume "find admin page on example.com"
+
+# Web vulnerability scan
+lume "scan web vulnerabilities on target.com"
+
+# SQL injection test
+lume "test sql injection on http://target.com/page?id=1"
+
+# Subdomain discovery
+lume "find subdomains of example.com"
+
+# Always test with dry-run first!
+lume --dry-run "your command here"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: "lume: command not found"
+Solution:
+  export PATH=$PATH:~/.local/bin
+  echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
+  source ~/.bashrc
+
+Problem: "Permission denied"
+Solution:
+  sudo lume "your command"
+
+Problem: "Module not found"
+Solution:
+  cd lume_security_toolkit
+  sudo pip3 uninstall lume-security-toolkit -y
+  sudo pip3 install -e .
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Read these files for more information:
+
+  KALI_INSTALL.md       - Detailed installation guide
+  README.md             - Complete documentation
+  QUICKSTART.md         - 5-minute quick start
+  EXAMPLES.md           - Usage examples
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  IMPORTANT REMINDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Only use on authorized systems
+✓ Always get written permission
+✓ Use --dry-run first
+✓ Read warnings before confirming
+✗ Never use without authorization
+✗ Illegal without permission
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 RECOMMENDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For the easiest installation, use OPTION 1 (Bootstrap Installer).
+
+It automatically creates everything and handles all setup for you!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Think in English. Hack in Kali. 🔦
+
+Remember: Hack ethically. Get permission. Stay legal. 🔒
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
