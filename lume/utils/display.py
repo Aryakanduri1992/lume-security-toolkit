@@ -52,14 +52,8 @@ class Display:
 {self.COLORS['cyan']}        Version: 0.2.0{self.COLORS['reset']}
 {self.COLORS['magenta']}        Codename: 'Maverick'{self.COLORS['reset']}
 
-{self.COLORS['blue']}[━━━]  GitHub: https://github.com/Aryakanduri1992/lume-security-toolkit  [━━━]{self.COLORS['reset']}
-
 {self.COLORS['green']}Welcome to the Lume Security Toolkit.
 The one stop shop for all of your natural language pentesting needs.{self.COLORS['reset']}
-
-{self.COLORS['yellow']}The Lume Security Toolkit is a product of ethical hacking education.{self.COLORS['reset']}
-
-{self.COLORS['cyan']}Visit: https://github.com/Aryakanduri1992/lume-security-toolkit{self.COLORS['reset']}
 
 {self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
 
