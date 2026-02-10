@@ -12,7 +12,7 @@ long_description = readme_file.read_text() if readme_file.exists() else ""
 
 setup(
     name="lume-security-toolkit",
-    version="0.2.0",
+    version="0.3.0",
     author="Lume Security Team",
     author_email="security@lume.dev",
     description="Think in English. Hack in Kali. - Natural language pentesting CLI",
@@ -43,9 +43,14 @@ setup(
     ],
     python_requires=">=3.8",
     install_requires=[
-        # No external dependencies for MVP
+        # Core dependencies (none for basic operation)
     ],
-    keywords="pentesting security kali-linux cybersecurity ethical-hacking cli",
+    extras_require={
+        'ml': [
+            'spacy>=3.0.0,<4.0.0',
+        ],
+    },
+    keywords="pentesting security kali-linux cybersecurity ethical-hacking cli machine-learning nlp",
     project_urls={
         "Bug Reports": "https://github.com/yourusername/lume-security-toolkit/issues",
         "Source": "https://github.com/yourusername/lume-security-toolkit",

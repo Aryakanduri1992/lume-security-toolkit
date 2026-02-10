@@ -2,6 +2,102 @@
 
 All notable changes to Lume Security Toolkit will be documented in this file.
 
+## [0.3.0] - 2026-02-10
+
+### 🚀 Major Feature - ML-Enhanced Natural Language Understanding
+
+#### Added
+- **ML Natural Language Normalization** - Safe, offline ML capabilities
+  - Uses spaCy (production-grade NLP library)
+  - Understands varied phrasing and word order
+  - Extracts intent from sentence structure
+  - Normalizes to canonical instructions
+  - **NEVER generates shell commands** (ML is preprocessor only)
+  
+- **--ml-normalize Flag** - Opt-in ML enhancement
+  - Disabled by default (rule-based remains primary)
+  - Configurable confidence threshold (--ml-confidence)
+  - Graceful fallback to rule-based parsing
+  - Full audit logging of ML decisions
+
+- **12 Canonical Intents** - Deterministic intent mapping
+  - Port scanning
+  - Network discovery
+  - Directory enumeration
+  - Subdomain enumeration
+  - Web vulnerability scanning
+  - SQL injection testing
+  - SSH/FTP brute forcing
+  - EternalBlue checking
+  - OS detection
+  - Vulnerability scanning
+  - Web technology identification
+
+- **Intent Validation Layer** - Critical safety check
+  - ML output validated by rule engine
+  - Ensures normalized instructions are parseable
+  - Prevents invalid command generation
+  - Multiple fallback mechanisms
+
+- **Enhanced Logging** - ML metadata in execution history
+  - Logs original input
+  - Logs normalized instruction
+  - Logs ML confidence score
+  - Full audit trail for compliance
+
+#### Security Guarantees
+- ✅ ML NEVER generates shell commands
+- ✅ ML NEVER chooses tools or exploits
+- ✅ ML NEVER executes anything
+- ✅ Rule engine remains sole authority
+- ✅ Fully offline operation (no API calls)
+- ✅ Deterministic intent mapping
+- ✅ Confidence thresholding with fallback
+- ✅ Rule engine validation of all ML output
+
+#### Technical Details
+- New module: `lume/ml/normalizer.py` (400+ lines)
+- spaCy integration with en_core_web_sm model (12MB)
+- Verb + keyword matching for intent detection
+- Entity recognition + regex for target extraction
+- Confidence scoring (0.0-1.0 scale)
+- Optional dependency (works without spaCy)
+
+#### Installation
+```bash
+# ML-enhanced installation
+sudo pip3 install -e ".[ml]" --break-system-packages
+python -m spacy download en_core_web_sm
+
+# Basic installation (no ML)
+sudo pip3 install -e . --break-system-packages
+```
+
+#### Usage Examples
+```bash
+# Enable ML normalization
+lume --ml-normalize "first give ip 192.168.1.1 then scan"
+
+# Adjust confidence threshold
+lume --ml-normalize --ml-confidence 0.80 "check example.com"
+
+# Default (rule-based only)
+lume "scan ports on 192.168.1.1"
+```
+
+#### Documentation
+- ML_FEATURE.md - Complete ML feature documentation
+- ML_INSTALLATION.md - Installation and troubleshooting guide
+- Updated README with ML capabilities
+
+#### Design Philosophy
+> "This tool prioritizes TRUST over intelligence."
+
+ML enhances language understanding but never controls execution.
+The rule-based engine remains authoritative for security compliance.
+
+---
+
 ## [0.2.0] - 2026-02-10
 
 ### 🎉 Major Features - Production-Ready Release

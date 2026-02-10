@@ -7,6 +7,7 @@ import sys
 import argparse
 from lume.core.engine import LumeEngine
 from lume.utils.display import Display
+from lume.ml.normalizer import MLNormalizer
 from lume import __version__
 
 
@@ -65,10 +66,26 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         help='Show command execution history'
     )
     
+    parser.add_argument(
+        '--ml-normalize',
+        action='store_true',
+        help='Enable ML-based natural language normalization (requires spaCy)'
+    )
+    
+    parser.add_argument(
+        '--ml-confidence',
+        type=float,
+        default=0.75,
+        help='Minimum confidence threshold for ML normalization (default: 0.75)'
+    )
+    
     args = parser.parse_args()
     
     display = Display()
     engine = LumeEngine()
+    
+    # Initialize ML normalizer (with rule engine for validation)
+    ml_normalizer = MLNormalizer(rule_engine=engine)
     
     # Show banner
     display.banner()
@@ -98,7 +115,33 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         sys.exit(0)
     
     try:
-        # Parse instruction
+        # Store original instruction for logging
+        original_instruction = args.instruction
+        
+        # ML Normalization (if enabled)
+        ml_metadata = None
+        if args.ml_normalize:
+            if not ml_normalizer.is_available():
+                display.warning("ML normalization requested but spaCy is not available")
+                display.info("Install with: python -m spacy download en_core_web_sm")
+                display.info("Falling back to rule-based parsing...")
+            else:
+                display.info("🤖 ML normalization enabled")
+                normalized, confidence, ml_metadata = ml_normalizer.normalize(
+                    args.instruction,
+                    confidence_threshold=args.ml_confidence
+                )
+                
+                if normalized:
+                    display.success(f"ML normalized input (confidence: {confidence:.2f})")
+                    display.info(f"Original: {original_instruction}")
+                    display.info(f"Normalized: {normalized}")
+                    args.instruction = normalized
+                else:
+                    display.info(f"ML fallback: {ml_metadata.get('fallback_reason', 'Unknown')}")
+                    display.info("Using rule-based parsing...")
+        
+        # Parse instruction (either normalized or original)
         result = engine.parse_instruction(args.instruction)
         
         if not result:
@@ -132,9 +175,14 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         # Show post-execution summary
         if exit_code == 0:
             display.show_summary(result)
-            # Log execution
-            target = engine._extract_target(args.instruction)
-            engine.log_execution(result['command'], result['summary'], target)
+            # Log execution (include ML metadata if used)
+            target = engine._extract_target(original_instruction)
+            engine.log_execution(
+                result['command'], 
+                result['summary'], 
+                target,
+                ml_metadata=ml_metadata
+            )
         
         sys.exit(exit_code)
         

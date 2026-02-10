@@ -136,14 +136,21 @@ class LumeEngine:
         if not log_dir.exists():
             log_dir.mkdir(parents=True, exist_ok=True)
     
-    def log_execution(self, command: str, summary: str, target: str = None):
+    def log_execution(self, command: str, summary: str, target: str = None, ml_metadata: dict = None):
         """Log command execution to history file"""
         try:
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             log_entry = f"[{timestamp}] Command: {command}\n"
             if target:
                 log_entry += f"            Target: {target}\n"
-            log_entry += f"            Summary: {summary}\n\n"
+            log_entry += f"            Summary: {summary}\n"
+            
+            # Log ML metadata if ML was used
+            if ml_metadata and ml_metadata.get('ml_used'):
+                log_entry += f"            ML Normalized: Yes (confidence: {ml_metadata.get('confidence', 0):.2f})\n"
+                log_entry += f"            Original Input: {ml_metadata.get('original_input', 'N/A')}\n"
+            
+            log_entry += "\n"
             
             with open(self.log_file, 'a') as f:
                 f.write(log_entry)
