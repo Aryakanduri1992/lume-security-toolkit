@@ -50,6 +50,12 @@ For more information: https://github.com/yourusername/lume-security-toolkit
         help='List all supported pentesting tools'
     )
     
+    parser.add_argument(
+        '--explain',
+        action='store_true',
+        help='Explain what the command does without executing it'
+    )
+    
     args = parser.parse_args()
     
     display = Display()
@@ -80,6 +86,12 @@ For more information: https://github.com/yourusername/lume-security-toolkit
         # Display the generated command
         display.show_command(result)
         
+        # Explain mode
+        if args.explain:
+            explanation = engine.explain_command(result)
+            display.show_explanation(explanation)
+            sys.exit(0)
+        
         # Dry run mode
         if args.dry_run:
             display.info("Dry-run mode: Command not executed")
@@ -93,6 +105,14 @@ For more information: https://github.com/yourusername/lume-security-toolkit
         # Execute command
         display.info("Executing command...")
         exit_code = engine.execute_command(result['command'])
+        
+        # Show post-execution summary
+        if exit_code == 0:
+            display.show_summary(result)
+            # Log execution
+            target = engine._extract_target(args.instruction)
+            engine.log_execution(result['command'], result['summary'], target)
+        
         sys.exit(exit_code)
         
     except KeyboardInterrupt:

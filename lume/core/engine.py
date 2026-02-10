@@ -7,11 +7,14 @@ import json
 import subprocess
 from pathlib import Path
 from typing import Dict, Optional, List
+from datetime import datetime
 
 
 class LumeEngine:
     def __init__(self):
         self.rules = self._load_rules()
+        self.log_file = Path.home() / '.lume' / 'history.log'
+        self._ensure_log_directory()
     
     def _load_rules(self) -> Dict:
         """Load command mapping rules from JSON file"""
@@ -26,7 +29,9 @@ class LumeEngine:
             'tool': str,
             'command': str,
             'description': str,
-            'warning': str
+            'warning': str,
+            'summary': str,
+            'impact': str
         }
         """
         instruction = instruction.lower().strip()
@@ -43,7 +48,9 @@ class LumeEngine:
                         'tool': rule['tool'],
                         'command': command,
                         'description': rule['description'],
-                        'warning': rule.get('warning', 'This command will interact with the target system.')
+                        'warning': rule.get('warning', 'This command will interact with the target system.'),
+                        'summary': rule.get('summary', 'Executed security testing command'),
+                        'impact': rule.get('impact', 'Gathered information about the target system')
                     }
         
         return None
@@ -122,3 +129,35 @@ class LumeEngine:
     def get_supported_tools(self) -> List[str]:
         """Return list of supported tools"""
         return list(set(rule['tool'] for rule in self.rules['rules']))
+    
+    def _ensure_log_directory(self):
+        """Ensure the log directory exists"""
+        log_dir = self.log_file.parent
+        if not log_dir.exists():
+            log_dir.mkdir(parents=True, exist_ok=True)
+    
+    def log_execution(self, command: str, summary: str, target: str = None):
+        """Log command execution to history file"""
+        try:
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            log_entry = f"[{timestamp}] Command: {command}\n"
+            if target:
+                log_entry += f"            Target: {target}\n"
+            log_entry += f"            Summary: {summary}\n\n"
+            
+            with open(self.log_file, 'a') as f:
+                f.write(log_entry)
+        except Exception as e:
+            # Silently fail if logging doesn't work
+            pass
+    
+    def explain_command(self, result: Dict) -> Dict:
+        """Return explanation without executing"""
+        return {
+            'command': result['command'],
+            'tool': result['tool'],
+            'description': result['description'],
+            'summary': result['summary'],
+            'impact': result['impact'],
+            'warning': result['warning']
+        }

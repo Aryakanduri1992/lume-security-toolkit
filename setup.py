@@ -12,7 +12,7 @@ long_description = readme_file.read_text() if readme_file.exists() else ""
 
 setup(
     name="lume-security-toolkit",
-    version="0.1.0",
+    version="0.2.0",
     author="Lume Security Team",
     author_email="security@lume.dev",
     description="Think in English. Hack in Kali. - Natural language pentesting CLI",

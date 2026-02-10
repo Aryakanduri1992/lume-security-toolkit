@@ -13,7 +13,9 @@
       ],
       "command": "nmap -sV -T4 {target}",
       "description": "Scan target for open ports and services",
-      "warning": "Port scanning may trigger IDS/IPS systems. Ensure you have authorization."
+      "warning": "Port scanning may trigger IDS/IPS systems. Ensure you have authorization.",
+      "summary": "Performed a service and version scan on the target",
+      "impact": "Identified open ports and detected running network services for further analysis"
     },
     {
       "tool": "nmap",
@@ -25,7 +27,9 @@
       ],
       "command": "nmap -sn {target}/24",
       "description": "Discover live hosts on network",
-      "warning": "Network scanning may be detected. Ensure you have authorization."
+      "warning": "Network scanning may be detected. Ensure you have authorization.",
+      "summary": "Performed network discovery to identify active hosts",
+      "impact": "Mapped live systems on the network for reconnaissance"
     },
     {
       "tool": "gobuster",
@@ -39,7 +43,9 @@
       ],
       "command": "gobuster dir -u {target} -w {wordlist} -t 50",
       "description": "Enumerate directories and files on web server",
-      "warning": "Directory brute-forcing generates significant traffic. Use responsibly."
+      "warning": "Directory brute-forcing generates significant traffic. Use responsibly.",
+      "summary": "Performed directory and file enumeration on web server",
+      "impact": "Discovered hidden paths, admin panels, and accessible web resources"
     },
     {
       "tool": "gobuster",
@@ -51,7 +57,9 @@
       ],
       "command": "gobuster dns -d {target} -w /usr/share/wordlists/dnsmap.txt -t 50",
       "description": "Enumerate subdomains",
-      "warning": "DNS enumeration may be logged. Ensure you have authorization."
+      "warning": "DNS enumeration may be logged. Ensure you have authorization.",
+      "summary": "Performed subdomain enumeration on target domain",
+      "impact": "Identified additional subdomains and expanded attack surface"
     },
     {
       "tool": "nikto",
@@ -63,7 +71,9 @@
       ],
       "command": "nikto -h {target}",
       "description": "Scan web server for vulnerabilities",
-      "warning": "Nikto scans are noisy and easily detected. Use with caution."
+      "warning": "Nikto scans are noisy and easily detected. Use with caution.",
+      "summary": "Performed comprehensive web vulnerability scan",
+      "impact": "Identified web server misconfigurations, outdated software, and potential vulnerabilities"
     },
     {
       "tool": "sqlmap",
@@ -75,7 +85,9 @@
       ],
       "command": "sqlmap -u {target} --batch --banner",
       "description": "Test for SQL injection vulnerabilities",
-      "warning": "SQL injection testing may damage databases. Only test authorized systems."
+      "warning": "SQL injection testing may damage databases. Only test authorized systems.",
+      "summary": "Tested target for SQL injection vulnerabilities",
+      "impact": "Assessed database security and identified potential injection points"
     },
     {
       "tool": "hydra",
@@ -86,7 +98,9 @@
       ],
       "command": "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt {target} {service}",
       "description": "Brute force authentication",
-      "warning": "Brute force attacks may lock accounts and are easily detected. Use carefully."
+      "warning": "Brute force attacks may lock accounts and are easily detected. Use carefully.",
+      "summary": "Performed brute force attack on SSH authentication",
+      "impact": "Tested password strength and attempted credential discovery"
     },
     {
       "tool": "hydra",
@@ -97,7 +111,9 @@
       ],
       "command": "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt {target} {service}",
       "description": "Brute force FTP authentication",
-      "warning": "Brute force attacks may lock accounts and are easily detected. Use carefully."
+      "warning": "Brute force attacks may lock accounts and are easily detected. Use carefully.",
+      "summary": "Performed brute force attack on FTP authentication",
+      "impact": "Tested FTP password strength and attempted credential discovery"
     },
     {
       "tool": "metasploit",
@@ -108,7 +124,9 @@
       ],
       "command": "msfconsole -q -x 'use exploit/windows/smb/ms17_010_eternalblue; set RHOSTS {target}; check; exit'",
       "description": "Check for EternalBlue vulnerability (MS17-010)",
-      "warning": "Exploitation can crash systems. Only use on authorized test systems."
+      "warning": "Exploitation can crash systems. Only use on authorized test systems.",
+      "summary": "Checked target for EternalBlue (MS17-010) vulnerability",
+      "impact": "Assessed critical SMB vulnerability that could allow remote code execution"
     },
     {
       "tool": "nmap",
@@ -120,7 +138,9 @@
       ],
       "command": "nmap -O {target}",
       "description": "Detect operating system",
-      "warning": "OS detection requires root privileges and may be detected."
+      "warning": "OS detection requires root privileges and may be detected.",
+      "summary": "Performed operating system detection and fingerprinting",
+      "impact": "Identified target OS type and version for targeted exploitation"
     },
     {
       "tool": "nmap",
@@ -131,7 +151,9 @@
       ],
       "command": "nmap --script vuln {target}",
       "description": "Scan for known vulnerabilities using NSE scripts",
-      "warning": "Vulnerability scanning may trigger security alerts."
+      "warning": "Vulnerability scanning may trigger security alerts.",
+      "summary": "Performed vulnerability scan using Nmap NSE scripts",
+      "impact": "Identified known CVEs and security weaknesses in target services"
     },
     {
       "tool": "whatweb",
@@ -143,7 +165,9 @@
       ],
       "command": "whatweb {target}",
       "description": "Identify web technologies and CMS",
-      "warning": "Web fingerprinting is generally safe but may be logged."
+      "warning": "Web fingerprinting is generally safe but may be logged.",
+      "summary": "Identified web technologies, frameworks, and CMS platform",
+      "impact": "Gathered intelligence on web stack for targeted vulnerability research"
     }
   ]
 }

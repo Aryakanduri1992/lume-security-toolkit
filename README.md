@@ -4,6 +4,19 @@
 
 Lume is a command-line tool for Kali Linux that converts plain English instructions into valid penetration testing commands. Perfect for learning, rapid testing, and streamlining your pentesting workflow.
 
+**Version 0.2.0** - Now with **production-grade explainability**! 🎉
+
+## 🎉 What's New in v0.2.0
+
+- 📊 **Post-Execution Summaries** - Learn what you did and why it matters
+- 🎓 **--explain Mode** - Understand commands before running them (training-friendly!)
+- 📝 **Execution Logging** - Full audit trail at `~/.lume/history.log`
+- 🔍 **Enhanced Rules** - Every command includes summary and impact
+
+[See Full Changelog](CHANGELOG.md) | [New Features Guide](FEATURES_v0.2.md)
+
+---
+
 ## ✨ Features
 
 - 🗣️ **Natural Language Interface** - Describe what you want to do in plain English
@@ -12,6 +25,7 @@ Lume is a command-line tool for Kali Linux that converts plain English instructi
 - 🔧 **Industry-Standard Tools** - Supports nmap, gobuster, nikto, sqlmap, hydra, and more
 - 📚 **Educational** - Shows the actual command being executed so you learn
 - 🚀 **No Dependencies** - Pure Python, no API keys or LLM required
+- ✅ **Production-Ready** - Audit trails, summaries, and compliance-ready (NEW!)
 
 ## 🚀 Installation
 
@@ -92,6 +106,12 @@ lume "find active hosts on 10.0.0.0"
 ### Options
 
 ```bash
+# Normal execution (with post-execution summary)
+lume "scan ports on 192.168.1.1"
+
+# Explain mode - understand without executing (NEW!)
+lume --explain "scan ports on 192.168.1.1"
+
 # Dry-run mode (show command without executing)
 lume --dry-run "scan ports on 192.168.1.1"
 
@@ -103,6 +123,38 @@ lume --version
 
 # Show help
 lume --help
+
+# Check execution history (NEW!)
+cat ~/.lume/history.log
+```
+
+### Example Output (v0.2.0)
+
+**Normal Execution:**
+```bash
+$ lume "scan ports on 192.168.70.1"
+
+[Command executes...]
+
+✔ Action Summary:
+  • Performed a service and version scan on the target
+  • Identified open ports and detected running network services for further analysis
+```
+
+**Explain Mode:**
+```bash
+$ lume --explain "find admin page on example.com"
+
+[Explanation Mode]
+
+Tool: gobuster
+Command: gobuster dir -u example.com -w /usr/share/wordlists/...
+
+What it does:
+  • Performed directory and file enumeration on web server
+  • Discovered hidden paths, admin panels, and accessible web resources
+
+⚠️  Directory brute-forcing generates significant traffic. Use responsibly.
 ```
 
 ## 🎯 Supported Tools
@@ -165,23 +217,26 @@ lume-security-toolkit/
 
 ## 🔮 Roadmap
 
-### v0.2.0 (Planned)
-- [ ] Command history and logging
+### v0.2.0 ✅ COMPLETE
+- [x] Command history and logging
+- [x] Post-execution summaries
+- [x] --explain mode for training
+- [x] Enhanced rules with impact descriptions
+
+### v0.3.0 (Planned)
+- [ ] Report generation (PDF/HTML)
+- [ ] Success/failure detection
+- [ ] Next-step recommendations
 - [ ] Custom wordlist support
 - [ ] Output parsing and formatting
 - [ ] More tool integrations (wpscan, enum4linux, etc.)
-
-### v0.3.0 (Future)
-- [ ] Plugin system for custom tools
-- [ ] Learning mode with explanations
-- [ ] Command chaining support
-- [ ] Report generation
 
 ### v1.0.0 (Vision)
 - [ ] Optional AI/LLM integration
 - [ ] Interactive mode
 - [ ] Workflow automation
 - [ ] Team collaboration features
+- [ ] Plugin system for custom tools
 
 ## 🤝 Contributing
 

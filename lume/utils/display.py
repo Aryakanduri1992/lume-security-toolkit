@@ -72,3 +72,19 @@ Think in English. Hack in Kali.{self.COLORS['reset']}
         for tool in sorted(tools):
             print(f"  • {tool}")
         print()
+    
+    def show_explanation(self, result: Dict):
+        """Display command explanation without execution"""
+        print(f"\n{self.COLORS['cyan']}{self.COLORS['bold']}[Explanation Mode]{self.COLORS['reset']}\n")
+        print(f"{self.COLORS['bold']}Tool:{self.COLORS['reset']} {result['tool']}")
+        print(f"{self.COLORS['bold']}Command:{self.COLORS['reset']} {result['command']}\n")
+        print(f"{self.COLORS['bold']}What it does:{self.COLORS['reset']}")
+        print(f"  • {result['summary']}")
+        print(f"  • {result['impact']}\n")
+        print(f"{self.COLORS['yellow']}⚠️  {result['warning']}{self.COLORS['reset']}\n")
+    
+    def show_summary(self, result: Dict):
+        """Display post-execution summary"""
+        print(f"\n{self.COLORS['green']}{self.COLORS['bold']}✔ Action Summary:{self.COLORS['reset']}")
+        print(f"{self.COLORS['green']}  • {result['summary']}{self.COLORS['reset']}")
+        print(f"{self.COLORS['green']}  • {result['impact']}{self.COLORS['reset']}\n")
