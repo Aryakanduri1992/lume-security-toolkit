@@ -21,8 +21,11 @@ Examples:
   lume "find admin login page on example.com"
   lume "brute force ssh on 192.168.1.10"
   lume --dry-run "enumerate subdomains"
+  lume --explain "scan ports on 192.168.1.1"
+  lume --history
+  lume "show history"
   
-For more information: https://github.com/yourusername/lume-security-toolkit
+For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         """
     )
     
@@ -56,6 +59,12 @@ For more information: https://github.com/yourusername/lume-security-toolkit
         help='Explain what the command does without executing it'
     )
     
+    parser.add_argument(
+        '--history',
+        action='store_true',
+        help='Show command execution history'
+    )
+    
     args = parser.parse_args()
     
     display = Display()
@@ -69,10 +78,23 @@ For more information: https://github.com/yourusername/lume-security-toolkit
         display.list_tools(engine.get_supported_tools())
         sys.exit(0)
     
+    # Show history if requested
+    if args.history:
+        display.show_history(engine.log_file)
+        sys.exit(0)
+    
     # Require instruction
     if not args.instruction:
         parser.print_help()
         sys.exit(1)
+    
+    # Check for special instructions
+    instruction_lower = args.instruction.lower()
+    
+    # Handle "show history" or "view history" commands
+    if 'history' in instruction_lower and ('show' in instruction_lower or 'view' in instruction_lower or 'display' in instruction_lower or 'see' in instruction_lower):
+        display.show_history(engine.log_file)
+        sys.exit(0)
     
     try:
         # Parse instruction

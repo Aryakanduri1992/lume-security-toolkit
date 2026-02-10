@@ -90,3 +90,51 @@ class Display:
         print(f"\n{self.COLORS['green']}{self.COLORS['bold']}✔ Action Summary:{self.COLORS['reset']}")
         print(f"{self.COLORS['green']}  • {result['summary']}{self.COLORS['reset']}")
         print(f"{self.COLORS['green']}  • {result['impact']}{self.COLORS['reset']}\n")
+    
+    def show_history(self, log_file):
+        """Display command execution history"""
+        from pathlib import Path
+        
+        log_path = Path(log_file)
+        
+        if not log_path.exists():
+            print(f"\n{self.COLORS['yellow']}No command history found.{self.COLORS['reset']}")
+            print(f"{self.COLORS['blue']}History will be created after your first command execution.{self.COLORS['reset']}\n")
+            return
+        
+        try:
+            with open(log_path, 'r') as f:
+                content = f.read()
+            
+            if not content.strip():
+                print(f"\n{self.COLORS['yellow']}Command history is empty.{self.COLORS['reset']}\n")
+                return
+            
+            print(f"\n{self.COLORS['cyan']}{self.COLORS['bold']}📜 Command Execution History{self.COLORS['reset']}")
+            print(f"{self.COLORS['blue']}{'━' * 60}{self.COLORS['reset']}\n")
+            
+            # Parse and display history entries
+            entries = content.strip().split('\n\n')
+            for i, entry in enumerate(entries, 1):
+                if entry.strip():
+                    lines = entry.strip().split('\n')
+                    print(f"{self.COLORS['bold']}Entry #{i}:{self.COLORS['reset']}")
+                    for line in lines:
+                        if line.startswith('['):
+                            # Timestamp line
+                            print(f"{self.COLORS['cyan']}{line}{self.COLORS['reset']}")
+                        elif 'Command:' in line:
+                            print(f"{self.COLORS['green']}{line}{self.COLORS['reset']}")
+                        elif 'Target:' in line:
+                            print(f"{self.COLORS['yellow']}{line}{self.COLORS['reset']}")
+                        elif 'Summary:' in line:
+                            print(f"{self.COLORS['magenta']}{line}{self.COLORS['reset']}")
+                        else:
+                            print(line)
+                    print()
+            
+            print(f"{self.COLORS['blue']}{'━' * 60}{self.COLORS['reset']}")
+            print(f"{self.COLORS['green']}Total commands executed: {len(entries)}{self.COLORS['reset']}\n")
+            
+        except Exception as e:
+            print(f"\n{self.COLORS['red']}Error reading history: {str(e)}{self.COLORS['reset']}\n")
