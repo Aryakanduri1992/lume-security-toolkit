@@ -85,8 +85,9 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     # Require instruction
     if not args.instruction:
-        parser.print_help()
-        sys.exit(1)
+        # Show full welcome screen like SET toolkit
+        display.welcome_screen()
+        sys.exit(0)
     
     # Check for special instructions
     instruction_lower = args.instruction.lower()

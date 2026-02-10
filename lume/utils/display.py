@@ -34,6 +34,71 @@ class Display:
 """
         print(banner)
     
+    def welcome_screen(self):
+        """Display full welcome screen like SET toolkit"""
+        import os
+        os.system('clear' if os.name != 'nt' else 'cls')
+        
+        welcome = f"""
+{self.COLORS['cyan']}{self.COLORS['bold']}
+╦  ╦ ╦╔╦╗╔═╗  ╔═╗┌─┐┌─┐┬ ┬┬─┐┬┌┬┐┬ ┬  ╔╦╗┌─┐┌─┐┬  ┬┌─┬┌┬┐
+║  ║ ║║║║║╣   ╚═╗├┤ │  │ │├┬┘│ │ └┬┘   ║ │ ││ ││  ├┴┐│ │ 
+╩═╝╚═╝╩ ╩╚═╝  ╚═╝└─┘└─┘└─┘┴└─┴ ┴  ┴    ╩ └─┘└─┘┴─┘┴ ┴┴ ┴ 
+{self.COLORS['reset']}
+
+{self.COLORS['green']}{self.COLORS['bold']}[━━━]  The Natural Language Pentesting Toolkit  [━━━]{self.COLORS['reset']}
+
+{self.COLORS['yellow']}        Created by: Arya Kanduri{self.COLORS['reset']}
+{self.COLORS['cyan']}        Version: 0.2.0{self.COLORS['reset']}
+{self.COLORS['magenta']}        Codename: 'Maverick'{self.COLORS['reset']}
+
+{self.COLORS['blue']}[━━━]  GitHub: https://github.com/Aryakanduri1992/lume-security-toolkit  [━━━]{self.COLORS['reset']}
+
+{self.COLORS['green']}Welcome to the Lume Security Toolkit.
+The one stop shop for all of your natural language pentesting needs.{self.COLORS['reset']}
+
+{self.COLORS['yellow']}The Lume Security Toolkit is a product of ethical hacking education.{self.COLORS['reset']}
+
+{self.COLORS['cyan']}Visit: https://github.com/Aryakanduri1992/lume-security-toolkit{self.COLORS['reset']}
+
+{self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
+
+{self.COLORS['bold']}SUPPORTED TOOLS:{self.COLORS['reset']}
+
+  {self.COLORS['green']}1){self.COLORS['reset']} nmap       - Network scanning and port discovery
+  {self.COLORS['green']}2){self.COLORS['reset']} gobuster   - Directory/subdomain enumeration
+  {self.COLORS['green']}3){self.COLORS['reset']} nikto      - Web vulnerability scanning
+  {self.COLORS['green']}4){self.COLORS['reset']} sqlmap     - SQL injection testing
+  {self.COLORS['green']}5){self.COLORS['reset']} hydra      - Password brute-forcing
+  {self.COLORS['green']}6){self.COLORS['reset']} metasploit - Exploitation framework
+  {self.COLORS['green']}7){self.COLORS['reset']} whatweb    - Web technology identification
+
+{self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
+
+{self.COLORS['bold']}QUICK START EXAMPLES:{self.COLORS['reset']}
+
+  {self.COLORS['cyan']}lume "scan ports on 192.168.1.1"{self.COLORS['reset']}
+  {self.COLORS['cyan']}lume "find admin page on example.com"{self.COLORS['reset']}
+  {self.COLORS['cyan']}lume "test sql injection on http://target.com/page?id=1"{self.COLORS['reset']}
+  {self.COLORS['cyan']}lume --explain "scan ports on target.com"{self.COLORS['reset']}
+  {self.COLORS['cyan']}lume --history{self.COLORS['reset']}
+  {self.COLORS['cyan']}lume --help{self.COLORS['reset']}
+
+{self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
+
+{self.COLORS['yellow']}{self.COLORS['bold']}⚠️  IMPORTANT:{self.COLORS['reset']}
+{self.COLORS['yellow']}   • Only use on authorized systems
+   • Get written permission before testing
+   • Unauthorized access is illegal
+   • Use for ethical hacking only{self.COLORS['reset']}
+
+{self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
+
+{self.COLORS['green']}{self.COLORS['bold']}Think in English. Hack in Kali. 🔦{self.COLORS['reset']}
+
+"""
+        print(welcome)
+    
     def show_command(self, result: Dict):
         """Display the generated command"""
         print(f"\n{self.COLORS['bold']}[Tool]{self.COLORS['reset']} {result['tool']}")
