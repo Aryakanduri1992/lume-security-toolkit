@@ -1,0 +1,149 @@
+{
+  "rules": [
+    {
+      "tool": "nmap",
+      "patterns": [
+        "scan.*port",
+        "port.*scan",
+        "find.*open.*port",
+        "check.*port",
+        "network.*scan",
+        "scan.*host",
+        "discover.*service"
+      ],
+      "command": "nmap -sV -T4 {target}",
+      "description": "Scan target for open ports and services",
+      "warning": "Port scanning may trigger IDS/IPS systems. Ensure you have authorization."
+    },
+    {
+      "tool": "nmap",
+      "patterns": [
+        "scan.*network",
+        "find.*live.*host",
+        "discover.*host",
+        "ping.*sweep"
+      ],
+      "command": "nmap -sn {target}/24",
+      "description": "Discover live hosts on network",
+      "warning": "Network scanning may be detected. Ensure you have authorization."
+    },
+    {
+      "tool": "gobuster",
+      "patterns": [
+        "find.*director",
+        "enumerate.*director",
+        "directory.*brute",
+        "find.*hidden.*page",
+        "discover.*path",
+        "find.*admin.*page"
+      ],
+      "command": "gobuster dir -u {target} -w {wordlist} -t 50",
+      "description": "Enumerate directories and files on web server",
+      "warning": "Directory brute-forcing generates significant traffic. Use responsibly."
+    },
+    {
+      "tool": "gobuster",
+      "patterns": [
+        "find.*subdomain",
+        "enumerate.*subdomain",
+        "subdomain.*brute",
+        "discover.*subdomain"
+      ],
+      "command": "gobuster dns -d {target} -w /usr/share/wordlists/dnsmap.txt -t 50",
+      "description": "Enumerate subdomains",
+      "warning": "DNS enumeration may be logged. Ensure you have authorization."
+    },
+    {
+      "tool": "nikto",
+      "patterns": [
+        "scan.*web.*vulnerabilit",
+        "web.*server.*scan",
+        "check.*web.*security",
+        "nikto.*scan"
+      ],
+      "command": "nikto -h {target}",
+      "description": "Scan web server for vulnerabilities",
+      "warning": "Nikto scans are noisy and easily detected. Use with caution."
+    },
+    {
+      "tool": "sqlmap",
+      "patterns": [
+        "sql.*injection",
+        "test.*sql.*injection",
+        "check.*sql.*vuln",
+        "sqlmap"
+      ],
+      "command": "sqlmap -u {target} --batch --banner",
+      "description": "Test for SQL injection vulnerabilities",
+      "warning": "SQL injection testing may damage databases. Only test authorized systems."
+    },
+    {
+      "tool": "hydra",
+      "patterns": [
+        "brute.*force.*ssh",
+        "crack.*ssh.*password",
+        "brute.*ssh"
+      ],
+      "command": "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt {target} {service}",
+      "description": "Brute force authentication",
+      "warning": "Brute force attacks may lock accounts and are easily detected. Use carefully."
+    },
+    {
+      "tool": "hydra",
+      "patterns": [
+        "brute.*force.*ftp",
+        "crack.*ftp.*password",
+        "brute.*ftp"
+      ],
+      "command": "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt {target} {service}",
+      "description": "Brute force FTP authentication",
+      "warning": "Brute force attacks may lock accounts and are easily detected. Use carefully."
+    },
+    {
+      "tool": "metasploit",
+      "patterns": [
+        "exploit.*eternal.*blue",
+        "ms17.*010",
+        "smb.*exploit"
+      ],
+      "command": "msfconsole -q -x 'use exploit/windows/smb/ms17_010_eternalblue; set RHOSTS {target}; check; exit'",
+      "description": "Check for EternalBlue vulnerability (MS17-010)",
+      "warning": "Exploitation can crash systems. Only use on authorized test systems."
+    },
+    {
+      "tool": "nmap",
+      "patterns": [
+        "os.*detection",
+        "detect.*operating.*system",
+        "fingerprint.*os",
+        "identify.*os"
+      ],
+      "command": "nmap -O {target}",
+      "description": "Detect operating system",
+      "warning": "OS detection requires root privileges and may be detected."
+    },
+    {
+      "tool": "nmap",
+      "patterns": [
+        "vulnerability.*scan",
+        "vuln.*scan",
+        "check.*vulnerabilit"
+      ],
+      "command": "nmap --script vuln {target}",
+      "description": "Scan for known vulnerabilities using NSE scripts",
+      "warning": "Vulnerability scanning may trigger security alerts."
+    },
+    {
+      "tool": "whatweb",
+      "patterns": [
+        "identify.*web.*technolog",
+        "fingerprint.*web",
+        "detect.*cms",
+        "what.*web.*server"
+      ],
+      "command": "whatweb {target}",
+      "description": "Identify web technologies and CMS",
+      "warning": "Web fingerprinting is generally safe but may be logged."
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🔦 LUME SECURITY TOOLKIT 🔦                               ║
+║                                                                              ║
+║                    Think in English. Hack in Kali.                           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📦 PROJECT SUCCESSFULLY CREATED!
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ QUICK START                                                                  │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+1. INSTALL LUME
+   $ cd lume_security_toolkit
+   $ sudo pip3 install -e .
+
+2. VERIFY INSTALLATION
+   $ lume --version
+   
+3. TRY YOUR FIRST COMMAND (SAFE - DRY RUN)
+   $ lume --dry-run "scan ports on scanme.nmap.org"
+
+4. RUN A REAL COMMAND
+   $ lume "scan ports on scanme.nmap.org"
+   (Type 'y' to confirm)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ PROJECT STRUCTURE                                                            │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+lume-security-toolkit/
+├── lume/                          # Main Python package
+│   ├── cli.py                    # CLI entry point
+│   ├── core/engine.py            # Command parsing engine
+│   ├── utils/display.py          # Output formatting
+│   └── data/rules.json           # Command mapping rules
+│
+├── setup.py                      # Installation script
+├── test_lume.sh                  # Test suite (executable)
+├── demo.sh                       # Interactive demo (executable)
+│
+└── Documentation/
+    ├── README.md                 # Main documentation
+    ├── QUICKSTART.md             # 5-minute guide
+    ├── EXAMPLES.md               # Usage examples
+    ├── INSTALL.md                # Installation guide
+    ├── CONTRIBUTING.md           # How to contribute
+    ├── DEVELOPMENT.md            # Developer guide
+    ├── PROJECT_STRUCTURE.md      # Architecture
+    ├── PROJECT_OVERVIEW.md       # Complete overview
+    └── SUMMARY.md                # Project summary
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ FEATURES                                                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+✅ Natural Language Interface    - Describe what you want in plain English
+✅ Safety First                  - Always asks for confirmation
+✅ Educational                   - Shows actual commands
+✅ No Dependencies               - Pure Python, no API keys needed
+✅ 7 Supported Tools             - nmap, gobuster, nikto, sqlmap, hydra, etc.
+✅ Dry-Run Mode                  - Test safely without execution
+✅ Smart Target Detection        - Auto-extracts IPs, domains, URLs
+✅ Comprehensive Documentation   - 9 detailed documentation files
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ USAGE EXAMPLES                                                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Port Scanning:
+  $ lume "scan ports on 192.168.1.1"
+  $ lume "find open ports on example.com"
+
+Directory Enumeration:
+  $ lume "find admin login page on example.com"
+  $ lume "enumerate directories on https://target.com"
+
+Web Vulnerability Scanning:
+  $ lume "scan web vulnerabilities on example.com"
+
+SQL Injection Testing:
+  $ lume "test sql injection on http://target.com/page?id=1"
+
+Subdomain Discovery:
+  $ lume "find subdomains of example.com"
+
+Network Discovery:
+  $ lume "find live hosts on 192.168.1.0"
+
+Brute Force:
+  $ lume "brute force ssh on 192.168.1.10"
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ TESTING & DEMO                                                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Run Test Suite:
+  $ ./test_lume.sh
+
+Run Interactive Demo:
+  $ ./demo.sh
+
+List Supported Tools:
+  $ lume --list-tools
+
+Show Help:
+  $ lume --help
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DOCUMENTATION GUIDE                                                          │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+📖 Start Here:
+   → QUICKSTART.md          (5-minute getting started)
+   → README.md              (Complete documentation)
+
+💡 Learn More:
+   → EXAMPLES.md            (Real-world usage examples)
+   → INSTALL.md             (Detailed installation)
+
+🛠️ For Developers:
+   → DEVELOPMENT.md         (Development guide)
+   → PROJECT_STRUCTURE.md   (Architecture details)
+   → CONTRIBUTING.md        (How to contribute)
+
+📊 Project Info:
+   → SUMMARY.md             (Project summary)
+   → PROJECT_OVERVIEW.md    (Complete overview)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ SUPPORTED TOOLS                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+• nmap       - Port scanning and network discovery
+• gobuster   - Directory/subdomain enumeration
+• nikto      - Web vulnerability scanning
+• sqlmap     - SQL injection testing
+• hydra      - Password brute-forcing
+• metasploit - Exploitation framework
+• whatweb    - Web technology identification
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ IMPORTANT SECURITY NOTES                                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+⚠️  ETHICAL USE ONLY
+    • Only use on systems you own or have explicit permission to test
+    • Unauthorized access to computer systems is illegal
+    • This tool is for educational purposes only
+
+⚠️  ALWAYS GET AUTHORIZATION
+    • Written permission required for testing
+    • Follow all applicable laws and regulations
+    • Report vulnerabilities responsibly
+
+⚠️  SAFETY FEATURES
+    • Confirmation required before execution
+    • Clear warnings displayed
+    • Dry-run mode available
+    • Visible command display
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ TECHNICAL DETAILS                                                            │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Language:        Python 3.8+
+Lines of Code:   482
+Dependencies:    None (stdlib only)
+License:         MIT
+Platform:        Linux (Kali Linux recommended)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ NEXT STEPS                                                                   │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+1. Install Lume:
+   $ cd lume_security_toolkit
+   $ sudo pip3 install -e .
+
+2. Read the Quick Start:
+   $ cat QUICKSTART.md
+
+3. Try the demo:
+   $ ./demo.sh
+
+4. Read the full documentation:
+   $ cat README.md
+
+5. Start hacking (ethically)!
+   $ lume "your command here"
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ CONTRIBUTING                                                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+We welcome contributions! See CONTRIBUTING.md for guidelines.
+
+Areas for contribution:
+  • New tool support
+  • Pattern improvements
+  • Documentation
+  • Bug fixes
+  • Testing
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ SUPPORT                                                                      │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+GitHub:  https://github.com/yourusername/lume-security-toolkit
+Issues:  https://github.com/yourusername/lume-security-toolkit/issues
+License: MIT
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║              Built with ❤️  for the ethical hacking community                ║
+║                                                                              ║
+║                    Remember: Hack ethically. Stay legal. 🔒                  ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

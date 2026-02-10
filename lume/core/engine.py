@@ -1,0 +1,124 @@
+"""
+Lume Engine - Core command parsing and execution logic
+"""
+
+import re
+import json
+import subprocess
+from pathlib import Path
+from typing import Dict, Optional, List
+
+
+class LumeEngine:
+    def __init__(self):
+        self.rules = self._load_rules()
+    
+    def _load_rules(self) -> Dict:
+        """Load command mapping rules from JSON file"""
+        rules_path = Path(__file__).parent.parent / 'data' / 'rules.json'
+        with open(rules_path, 'r') as f:
+            return json.load(f)
+    
+    def parse_instruction(self, instruction: str) -> Optional[Dict]:
+        """
+        Parse natural language instruction into a command
+        Returns: {
+            'tool': str,
+            'command': str,
+            'description': str,
+            'warning': str
+        }
+        """
+        instruction = instruction.lower().strip()
+        
+        # Extract target (IP, domain, URL)
+        target = self._extract_target(instruction)
+        
+        # Match against rules
+        for rule in self.rules['rules']:
+            for pattern in rule['patterns']:
+                if re.search(pattern, instruction, re.IGNORECASE):
+                    command = self._build_command(rule, target, instruction)
+                    return {
+                        'tool': rule['tool'],
+                        'command': command,
+                        'description': rule['description'],
+                        'warning': rule.get('warning', 'This command will interact with the target system.')
+                    }
+        
+        return None
+    
+    def _extract_target(self, instruction: str) -> Optional[str]:
+        """Extract IP address, domain, or URL from instruction"""
+        # IP address pattern
+        ip_pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
+        ip_match = re.search(ip_pattern, instruction)
+        if ip_match:
+            return ip_match.group(0)
+        
+        # Domain pattern
+        domain_pattern = r'\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}\b'
+        domain_match = re.search(domain_pattern, instruction)
+        if domain_match:
+            return domain_match.group(0)
+        
+        # URL pattern
+        url_pattern = r'https?://[^\s]+'
+        url_match = re.search(url_pattern, instruction)
+        if url_match:
+            return url_match.group(0)
+        
+        return None
+    
+    def _build_command(self, rule: Dict, target: Optional[str], instruction: str) -> str:
+        """Build the actual command from rule template"""
+        command = rule['command']
+        
+        # Replace target placeholder
+        if target:
+            command = command.replace('{target}', target)
+        else:
+            # Use placeholder if no target found
+            command = command.replace('{target}', '<TARGET>')
+        
+        # Handle special cases based on instruction keywords
+        if rule['tool'] == 'nmap':
+            if 'fast' in instruction or 'quick' in instruction:
+                command = command.replace('-sV', '-F')
+            elif 'aggressive' in instruction:
+                command = command.replace('-sV', '-A')
+        
+        elif rule['tool'] == 'gobuster':
+            # Extract wordlist if mentioned
+            if 'common' in instruction:
+                command = command.replace('{wordlist}', '/usr/share/wordlists/dirb/common.txt')
+            else:
+                command = command.replace('{wordlist}', '/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt')
+        
+        elif rule['tool'] == 'hydra':
+            # Extract service
+            if 'ssh' in instruction:
+                command = command.replace('{service}', 'ssh')
+            elif 'ftp' in instruction:
+                command = command.replace('{service}', 'ftp')
+            elif 'http' in instruction or 'web' in instruction:
+                command = command.replace('{service}', 'http-post-form')
+        
+        return command
+    
+    def execute_command(self, command: str) -> int:
+        """Execute the command and return exit code"""
+        try:
+            result = subprocess.run(
+                command,
+                shell=True,
+                text=True
+            )
+            return result.returncode
+        except Exception as e:
+            print(f"Execution error: {str(e)}")
+            return 1
+    
+    def get_supported_tools(self) -> List[str]:
+        """Return list of supported tools"""
+        return list(set(rule['tool'] for rule in self.rules['rules']))

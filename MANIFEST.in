@@ -1,0 +1,7 @@
+include README.md
+include LICENSE
+include QUICKSTART.md
+include EXAMPLES.md
+include INSTALL.md
+include CONTRIBUTING.md
+recursive-include lume/data *.json
