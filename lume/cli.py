@@ -6,6 +6,8 @@ Lume CLI - Main entry point
 import sys
 import argparse
 from lume.core.engine import LumeEngine
+from lume.core.legacy_adapter import LegacyAdapter
+from lume.core.plugin_registry import PluginRegistry
 from lume.utils.display import Display
 from lume.ml.normalizer import MLNormalizer
 from lume import __version__
@@ -79,10 +81,27 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         help='Minimum confidence threshold for ML normalization (default: 0.75)'
     )
     
+    parser.add_argument(
+        '--list-plugins',
+        action='store_true',
+        help='List all available plugins (v0.4.0 feature)'
+    )
+    
+    parser.add_argument(
+        '--plugin-info',
+        type=str,
+        metavar='PLUGIN',
+        help='Show information about a specific plugin'
+    )
+    
     args = parser.parse_args()
     
     display = Display()
     engine = LumeEngine()
+    
+    # Initialize plugin system (v0.4.0)
+    adapter = LegacyAdapter()
+    registry = PluginRegistry()
     
     # Initialize ML normalizer (with rule engine for validation)
     ml_normalizer = MLNormalizer(rule_engine=engine)
@@ -93,6 +112,29 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     # List tools if requested
     if args.list_tools:
         display.list_tools(engine.get_supported_tools())
+        sys.exit(0)
+    
+    # List plugins if requested (v0.4.0)
+    if args.list_plugins:
+        plugins = registry.list_all()
+        display.info(f"Available plugins ({len(plugins)}):")
+        for plugin_name in plugins:
+            print(f"  - {plugin_name}")
+        sys.exit(0)
+    
+    # Show plugin info if requested (v0.4.0)
+    if args.plugin_info:
+        plugin = registry.get(args.plugin_info)
+        if not plugin:
+            display.error(f"Plugin not found: {args.plugin_info}")
+            sys.exit(1)
+        
+        display.info(f"Plugin: {plugin.name}")
+        display.info(f"Command template: {' '.join(plugin.command_template)}")
+        explanation = plugin.explain("<target>")
+        display.info(f"Summary: {explanation['summary']}")
+        display.info(f"Impact: {explanation['impact']}")
+        display.warning(f"Warning: {explanation['warning']}")
         sys.exit(0)
     
     # Show history if requested
@@ -141,11 +183,11 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
                     display.info(f"ML fallback: {ml_metadata.get('fallback_reason', 'Unknown')}")
                     display.info("Using rule-based parsing...")
         
-        # Parse instruction (either normalized or original)
-        result = engine.parse_instruction(args.instruction)
+        # Parse and execute via plugin system (v0.4.0 with backward compatibility)
+        result = adapter.parse_and_execute(args.instruction, dry_run=args.dry_run or args.explain)
         
-        if not result:
-            display.error("Could not understand the instruction. Try being more specific.")
+        if not result['success'] and result.get('error'):
+            display.error(result['error'])
             display.info("Example: lume \"scan ports on 192.168.1.1\"")
             sys.exit(1)
         
@@ -154,8 +196,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         
         # Explain mode
         if args.explain:
-            explanation = engine.explain_command(result)
-            display.show_explanation(explanation)
+            display.show_explanation(result)
             sys.exit(0)
         
         # Dry run mode
@@ -168,12 +209,12 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
             display.warning("Execution cancelled by user")
             sys.exit(0)
         
-        # Execute command
+        # Execute command via plugin system
         display.info("Executing command...")
-        exit_code = engine.execute_command(result['command'])
+        result = adapter.parse_and_execute(args.instruction, dry_run=False)
         
         # Show post-execution summary
-        if exit_code == 0:
+        if result['success']:
             display.show_summary(result)
             # Log execution (include ML metadata if used)
             target = engine._extract_target(original_instruction)
@@ -183,8 +224,11 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
                 target,
                 ml_metadata=ml_metadata
             )
-        
-        sys.exit(exit_code)
+            sys.exit(0)
+        else:
+            if result.get('error'):
+                display.error(f"Execution failed: {result['error']}")
+            sys.exit(1)
         
     except KeyboardInterrupt:
         display.warning("\nOperation cancelled by user")
