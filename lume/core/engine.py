@@ -16,7 +16,14 @@ class LumeEngine:
         self.rules = self._load_rules()
         self.log_file = Path.home() / '.lume' / 'history.log'
         self._ensure_log_directory()
-        self.smart_engine = SmartEngine()  # Advanced NL understanding
+        self._smart_engine = None  # Lazy load only when needed
+    
+    @property
+    def smart_engine(self):
+        """Lazy load smart engine only when needed"""
+        if self._smart_engine is None:
+            self._smart_engine = SmartEngine()
+        return self._smart_engine
     
     def _load_rules(self) -> Dict:
         """Load command mapping rules from JSON file"""

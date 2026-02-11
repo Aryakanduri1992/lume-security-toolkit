@@ -106,9 +106,6 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     # Initialize ML normalizer (with rule engine for validation)
     ml_normalizer = MLNormalizer(rule_engine=engine)
     
-    # Show banner
-    display.banner()
-    
     # List tools if requested
     if args.list_tools:
         display.list_tools(engine.get_supported_tools())
