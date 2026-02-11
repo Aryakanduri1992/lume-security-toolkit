@@ -38,9 +38,21 @@ class SqlmapPlugin(BasePlugin):
             target: Target to validate
             
         Returns:
-            bool: True if valid URL
+            bool: True if valid URL or looks like a URL parameter
         """
-        return validate_url(target)
+        # Accept full URLs
+        if validate_url(target):
+            return True
+        
+        # Also accept if it looks like a URL with parameters (common for SQL injection)
+        if '?' in target or '=' in target:
+            return True
+        
+        # Accept domains that might be part of URLs
+        if validate_domain(target):
+            return True
+        
+        return False
     
     def build_command(self, target: str, **kwargs) -> List[str]:
         """

@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Optional, List
 from datetime import datetime
+from lume.core.smart_engine import SmartEngine
 
 
 class LumeEngine:
@@ -15,6 +16,7 @@ class LumeEngine:
         self.rules = self._load_rules()
         self.log_file = Path.home() / '.lume' / 'history.log'
         self._ensure_log_directory()
+        self.smart_engine = SmartEngine()  # Advanced NL understanding
     
     def _load_rules(self) -> Dict:
         """Load command mapping rules from JSON file"""
@@ -24,7 +26,12 @@ class LumeEngine:
     
     def parse_instruction(self, instruction: str) -> Optional[Dict]:
         """
-        Parse natural language instruction into a command
+        Parse natural language instruction into a command.
+        
+        Uses two-stage approach:
+        1. Try smart engine (advanced NL understanding)
+        2. Fall back to pattern matching
+        
         Returns: {
             'tool': str,
             'command': str,
@@ -36,7 +43,28 @@ class LumeEngine:
         """
         instruction = instruction.lower().strip()
         
-        # Extract target (IP, domain, URL)
+        # Stage 1: Try smart engine first
+        intent = self.smart_engine.detect_intent(instruction)
+        
+        if intent and intent['confidence'] >= 40:
+            # Smart engine found a good match
+            tool_name = intent['tool']
+            target = intent['target']
+            
+            # Find the rule for this tool
+            for rule in self.rules['rules']:
+                if rule['tool'] == tool_name:
+                    command = self._build_command(rule, target, instruction)
+                    return {
+                        'tool': rule['tool'],
+                        'command': command,
+                        'description': rule['description'],
+                        'warning': rule.get('warning', 'This command will interact with the target system.'),
+                        'summary': rule.get('summary', 'Executed security testing command'),
+                        'impact': rule.get('impact', 'Gathered information about the target system')
+                    }
+        
+        # Stage 2: Fall back to traditional pattern matching
         target = self._extract_target(instruction)
         
         # Match against rules
@@ -53,11 +81,20 @@ class LumeEngine:
                         'impact': rule.get('impact', 'Gathered information about the target system')
                     }
         
-        # Smart fallback: If we have a target but no pattern match, try to infer intent
+        # Stage 3: Smart fallback - if we have a target and action keywords
         if target:
-            # Check for common keywords
-            if any(word in instruction for word in ['scan', 'check', 'test', 'find', 'discover']):
-                # Default to nmap for scanning
+            if any(word in instruction for word in ['scan', 'check', 'test', 'find', 'discover', 'probe', 'analyze']):
+                # Default to nmap for general scanning
+                return {
+                    'tool': 'nmap',
+                    'command': f'nmap -sV -T4 {target}',
+                    'description': 'Scan target for open ports and services',
+                    'warning': 'Port scanning may trigger IDS/IPS systems. Ensure you have authorization.',
+                    'summary': 'Performed a service and version scan on the target',
+                    'impact': 'Identified open ports and detected running network services for further analysis'
+                }
+            else:
+                # Just a target with no clear action - default to nmap
                 return {
                     'tool': 'nmap',
                     'command': f'nmap -sV -T4 {target}',
