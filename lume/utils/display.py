@@ -28,7 +28,7 @@ class Display:
 ║  ║ ║║║║║╣   ╚═╗├┤ │  │ │├┬┘│ │ └┬┘   ║ │ ││ ││  ├┴┐│ │ 
 ╩═╝╚═╝╩ ╩╚═╝  ╚═╝└─┘└─┘└─┘┴└─┴ ┴  ┴    ╩ └─┘└─┘┴─┘┴ ┴┴ ┴ 
 {self.COLORS['reset']}
-{self.COLORS['green']}                    Version 0.3.0 - ML-Enhanced{self.COLORS['reset']}
+{self.COLORS['green']}                    Version 0.4.0 - Plugin Architecture{self.COLORS['reset']}
 {self.COLORS['yellow']}              Think in English. Hack in Kali.{self.COLORS['reset']}
 {self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
 """
@@ -49,7 +49,7 @@ class Display:
 {self.COLORS['green']}{self.COLORS['bold']}[━━━]  The Natural Language Pentesting Toolkit  [━━━]{self.COLORS['reset']}
 
 {self.COLORS['yellow']}        Created by: Arya Kanduri{self.COLORS['reset']}
-{self.COLORS['cyan']}        Version: 0.3.0{self.COLORS['reset']}
+{self.COLORS['cyan']}        Version: 0.4.0{self.COLORS['reset']}
 {self.COLORS['magenta']}        Codename: 'Maverick'{self.COLORS['reset']}
 
 {self.COLORS['green']}Welcome to the Lume Security Toolkit.
