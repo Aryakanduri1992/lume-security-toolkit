@@ -188,12 +188,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         
         if not result['success'] and result.get('error'):
             display.error(result['error'])
-            display.info("\n💡 Try these examples:")
-            display.info("   • lume \"scan ports on 192.168.1.1\"")
-            display.info("   • lume \"find directories on example.com\"")
-            display.info("   • lume \"test sql injection on http://target.com\"")
-            display.info("\n📚 Use 'lume --help' for more options")
-            display.info("🔌 Use 'lume --list-plugins' to see available tools\n")
+            display.info("Example: lume \"scan ports on 192.168.1.1\"")
             sys.exit(1)
         
         # Display the generated command
