@@ -28,9 +28,9 @@ class LumeEngine:
         """
         Parse natural language instruction into a command.
         
-        Uses two-stage approach:
-        1. Try smart engine (advanced NL understanding)
-        2. Fall back to pattern matching
+        Uses optimized two-stage approach:
+        1. Try fast pattern matching first
+        2. Fall back to smart engine if no match
         
         Returns: {
             'tool': str,
@@ -42,32 +42,9 @@ class LumeEngine:
         }
         """
         instruction = instruction.lower().strip()
-        
-        # Stage 1: Try smart engine first
-        intent = self.smart_engine.detect_intent(instruction)
-        
-        if intent and intent['confidence'] >= 40:
-            # Smart engine found a good match
-            tool_name = intent['tool']
-            target = intent['target']
-            
-            # Find the rule for this tool
-            for rule in self.rules['rules']:
-                if rule['tool'] == tool_name:
-                    command = self._build_command(rule, target, instruction)
-                    return {
-                        'tool': rule['tool'],
-                        'command': command,
-                        'description': rule['description'],
-                        'warning': rule.get('warning', 'This command will interact with the target system.'),
-                        'summary': rule.get('summary', 'Executed security testing command'),
-                        'impact': rule.get('impact', 'Gathered information about the target system')
-                    }
-        
-        # Stage 2: Fall back to traditional pattern matching
         target = self._extract_target(instruction)
         
-        # Match against rules
+        # Stage 1: Fast pattern matching (most common case)
         for rule in self.rules['rules']:
             for pattern in rule['patterns']:
                 if re.search(pattern, instruction, re.IGNORECASE):
@@ -81,10 +58,28 @@ class LumeEngine:
                         'impact': rule.get('impact', 'Gathered information about the target system')
                     }
         
+        # Stage 2: Smart engine for complex/ambiguous queries
+        intent = self.smart_engine.detect_intent(instruction)
+        
+        if intent and intent['confidence'] >= 40:
+            tool_name = intent['tool']
+            target = intent['target']
+            
+            for rule in self.rules['rules']:
+                if rule['tool'] == tool_name:
+                    command = self._build_command(rule, target, instruction)
+                    return {
+                        'tool': rule['tool'],
+                        'command': command,
+                        'description': rule['description'],
+                        'warning': rule.get('warning', 'This command will interact with the target system.'),
+                        'summary': rule.get('summary', 'Executed security testing command'),
+                        'impact': rule.get('impact', 'Gathered information about the target system')
+                    }
+        
         # Stage 3: Smart fallback - if we have a target and action keywords
         if target:
             if any(word in instruction for word in ['scan', 'check', 'test', 'find', 'discover', 'probe', 'analyze']):
-                # Default to nmap for general scanning
                 return {
                     'tool': 'nmap',
                     'command': f'nmap -sV -T4 {target}',
@@ -94,7 +89,6 @@ class LumeEngine:
                     'impact': 'Identified open ports and detected running network services for further analysis'
                 }
             else:
-                # Just a target with no clear action - default to nmap
                 return {
                     'tool': 'nmap',
                     'command': f'nmap -sV -T4 {target}',
