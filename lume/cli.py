@@ -188,7 +188,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         
         if not result['success'] and result.get('error'):
             display.error(result['error'])
-            display.info("Example: lume \"scan ports on 192.168.1.1\"")
+            # No example message - error is self-explanatory
             sys.exit(1)
         
         # Display the generated command
@@ -226,9 +226,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
             )
             sys.exit(0)
         else:
-            if result.get('error'):
-                display.error(f"Execution failed: {result['error']}")
-            # Don't show generic example on execution errors
+            # Execution failed - error already displayed by tool
             sys.exit(1)
         
     except KeyboardInterrupt:
