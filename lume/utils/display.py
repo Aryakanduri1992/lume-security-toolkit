@@ -32,8 +32,6 @@ class Display:
     ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
 {self.COLORS['reset']}
 {self.COLORS['red']}         🔦 Security Toolkit 🔦{self.COLORS['reset']}
-{self.COLORS['white']}  Developed by Lume Security Under {self.COLORS['bold']}Travlume Tech Pvt Ltd{self.COLORS['reset']}
-{self.COLORS['green']}      Version 0.4.0 - Plugin Architecture{self.COLORS['reset']}
 {self.COLORS['yellow']}      Think in English. Hack in Kali.{self.COLORS['reset']}
 {self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
 """
