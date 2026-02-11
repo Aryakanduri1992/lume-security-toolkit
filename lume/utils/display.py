@@ -60,7 +60,7 @@ class Display:
 
 {self.COLORS['green']}{self.COLORS['bold']}[━━━]  The Natural Language Pentesting Toolkit  [━━━]{self.COLORS['reset']}
 
-{self.COLORS['yellow']}        Created by: Arya Kanduri{self.COLORS['reset']}
+{self.COLORS['white']}        Developed by Lume Security Under {self.COLORS['bold']}Travlume Tech Pvt Ltd{self.COLORS['reset']}
 {self.COLORS['cyan']}        Version: 0.4.0{self.COLORS['reset']}
 {self.COLORS['magenta']}        Codename: 'Maverick'{self.COLORS['reset']}
 
