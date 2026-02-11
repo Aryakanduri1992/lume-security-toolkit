@@ -23,6 +23,7 @@ class Display:
     def banner(self):
         """Display Lume banner with logo"""
         banner = f"""
+{self.COLORS['blue']}┌{'─' * 58}┐{self.COLORS['reset']}
 {self.COLORS['cyan']}{self.COLORS['bold']}
     ██╗     ██╗   ██╗███╗   ███╗███████╗
     ██║     ██║   ██║████╗ ████║██╔════╝
@@ -33,6 +34,7 @@ class Display:
 {self.COLORS['reset']}
 {self.COLORS['red']}         🔦 Security Toolkit 🔦{self.COLORS['reset']}
 {self.COLORS['yellow']}      Think in English. Hack in Kali.{self.COLORS['reset']}
+{self.COLORS['blue']}└{'─' * 58}┘{self.COLORS['reset']}
 """
         print(banner)
     
