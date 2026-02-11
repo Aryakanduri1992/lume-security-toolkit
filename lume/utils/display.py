@@ -33,7 +33,6 @@ class Display:
 {self.COLORS['reset']}
 {self.COLORS['red']}         🔦 Security Toolkit 🔦{self.COLORS['reset']}
 {self.COLORS['yellow']}      Think in English. Hack in Kali.{self.COLORS['reset']}
-{self.COLORS['blue']}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{self.COLORS['reset']}
 """
         print(banner)
     
