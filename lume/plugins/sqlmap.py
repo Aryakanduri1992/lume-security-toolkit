@@ -8,7 +8,7 @@ Supports:
 """
 
 from lume.core.plugin_base import BasePlugin
-from lume.core.validators import validate_url
+from lume.core.validators import validate_url, validate_domain
 from typing import List, Dict
 
 
