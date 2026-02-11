@@ -62,15 +62,62 @@ class HydraPlugin(BasePlugin):
         Returns:
             List[str]: Command as list
         """
+        import os
+        
         service = kwargs.get('service', 'ssh')
         
-        command = [
-            "hydra",
-            "-L", "/usr/share/wordlists/metasploit/unix_users.txt",
-            "-P", "/usr/share/wordlists/rockyou.txt",
-            target,
-            service
-        ]
+        # Check for wordlists and use available ones
+        user_wordlist = '/usr/share/wordlists/metasploit/unix_users.txt'
+        pass_wordlist = '/usr/share/wordlists/rockyou.txt'
+        
+        # Fallback wordlists if primary ones don't exist
+        if not os.path.exists(user_wordlist):
+            # Try common alternatives
+            alternatives = [
+                '/usr/share/wordlists/metasploit/namelist.txt',
+                '/usr/share/seclists/Usernames/top-usernames-shortlist.txt',
+                '/usr/share/wordlists/dirb/others/names.txt'
+            ]
+            for alt in alternatives:
+                if os.path.exists(alt):
+                    user_wordlist = alt
+                    break
+            else:
+                # Use single common username as last resort
+                user_wordlist = 'root'  # Will use -l instead of -L
+        
+        if not os.path.exists(pass_wordlist):
+            # Try common alternatives
+            alternatives = [
+                '/usr/share/wordlists/rockyou.txt.gz',
+                '/usr/share/wordlists/fasttrack.txt',
+                '/usr/share/seclists/Passwords/Common-Credentials/10-million-password-list-top-100.txt',
+                '/usr/share/wordlists/dirb/others/best110.txt'
+            ]
+            for alt in alternatives:
+                if os.path.exists(alt):
+                    pass_wordlist = alt
+                    break
+            else:
+                # Use common passwords as last resort
+                pass_wordlist = 'password'  # Will use -p instead of -P
+        
+        # Build command based on available wordlists
+        command = ["hydra"]
+        
+        # Add user wordlist
+        if os.path.exists(user_wordlist):
+            command.extend(["-L", user_wordlist])
+        else:
+            command.extend(["-l", user_wordlist])  # Single username
+        
+        # Add password wordlist
+        if os.path.exists(pass_wordlist):
+            command.extend(["-P", pass_wordlist])
+        else:
+            command.extend(["-p", pass_wordlist])  # Single password
+        
+        command.extend([target, service])
         
         return command
     

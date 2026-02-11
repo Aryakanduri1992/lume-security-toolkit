@@ -228,6 +228,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         else:
             if result.get('error'):
                 display.error(f"Execution failed: {result['error']}")
+            # Don't show generic example on execution errors
             sys.exit(1)
         
     except KeyboardInterrupt:
