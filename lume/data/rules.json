@@ -9,7 +9,11 @@
         "check.*port",
         "network.*scan",
         "scan.*host",
-        "discover.*service"
+        "discover.*service",
+        "scan.*\\d+\\.\\d+\\.\\d+\\.\\d+",
+        "scan of",
+        "scan\\s+\\d+\\.\\d+\\.\\d+\\.\\d+",
+        "nmap"
       ],
       "command": "nmap -sV -T4 {target}",
       "description": "Scan target for open ports and services",
@@ -23,7 +27,8 @@
         "scan.*network",
         "find.*live.*host",
         "discover.*host",
-        "ping.*sweep"
+        "ping.*sweep",
+        "network.*discover"
       ],
       "command": "nmap -sn {target}/24",
       "description": "Discover live hosts on network",
@@ -39,7 +44,11 @@
         "directory.*brute",
         "find.*hidden.*page",
         "discover.*path",
-        "find.*admin.*page"
+        "find.*admin.*page",
+        "find.*page",
+        "find.*path",
+        "gobuster",
+        "dir.*enum"
       ],
       "command": "gobuster dir -u {target} -w {wordlist} -t 50",
       "description": "Enumerate directories and files on web server",
@@ -53,7 +62,9 @@
         "find.*subdomain",
         "enumerate.*subdomain",
         "subdomain.*brute",
-        "discover.*subdomain"
+        "discover.*subdomain",
+        "subdomain.*enum",
+        "dns.*enum"
       ],
       "command": "gobuster dns -d {target} -w /usr/share/wordlists/dnsmap.txt -t 50",
       "description": "Enumerate subdomains",
@@ -67,7 +78,10 @@
         "scan.*web.*vulnerabilit",
         "web.*server.*scan",
         "check.*web.*security",
-        "nikto.*scan"
+        "nikto.*scan",
+        "nikto",
+        "web.*vuln",
+        "scan.*web"
       ],
       "command": "nikto -h {target}",
       "description": "Scan web server for vulnerabilities",
@@ -81,7 +95,10 @@
         "sql.*injection",
         "test.*sql.*injection",
         "check.*sql.*vuln",
-        "sqlmap"
+        "sqlmap",
+        "sql.*test",
+        "test.*sql",
+        "sqli"
       ],
       "command": "sqlmap -u {target} --batch --banner",
       "description": "Test for SQL injection vulnerabilities",
@@ -94,7 +111,9 @@
       "patterns": [
         "brute.*force.*ssh",
         "crack.*ssh.*password",
-        "brute.*ssh"
+        "brute.*ssh",
+        "hydra.*ssh",
+        "password.*crack.*ssh"
       ],
       "command": "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt {target} {service}",
       "description": "Brute force authentication",
@@ -107,7 +126,9 @@
       "patterns": [
         "brute.*force.*ftp",
         "crack.*ftp.*password",
-        "brute.*ftp"
+        "brute.*ftp",
+        "hydra.*ftp",
+        "password.*crack.*ftp"
       ],
       "command": "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt {target} {service}",
       "description": "Brute force FTP authentication",
@@ -120,7 +141,10 @@
       "patterns": [
         "exploit.*eternal.*blue",
         "ms17.*010",
-        "smb.*exploit"
+        "smb.*exploit",
+        "eternalblue",
+        "metasploit",
+        "msf"
       ],
       "command": "msfconsole -q -x 'use exploit/windows/smb/ms17_010_eternalblue; set RHOSTS {target}; check; exit'",
       "description": "Check for EternalBlue vulnerability (MS17-010)",
@@ -134,7 +158,9 @@
         "os.*detection",
         "detect.*operating.*system",
         "fingerprint.*os",
-        "identify.*os"
+        "identify.*os",
+        "detect.*os",
+        "os.*scan"
       ],
       "command": "nmap -O {target}",
       "description": "Detect operating system",
@@ -147,7 +173,9 @@
       "patterns": [
         "vulnerability.*scan",
         "vuln.*scan",
-        "check.*vulnerabilit"
+        "check.*vulnerabilit",
+        "scan.*vuln",
+        "find.*vuln"
       ],
       "command": "nmap --script vuln {target}",
       "description": "Scan for known vulnerabilities using NSE scripts",
@@ -161,7 +189,10 @@
         "identify.*web.*technolog",
         "fingerprint.*web",
         "detect.*cms",
-        "what.*web.*server"
+        "what.*web.*server",
+        "whatweb",
+        "web.*tech",
+        "identify.*tech"
       ],
       "command": "whatweb {target}",
       "description": "Identify web technologies and CMS",

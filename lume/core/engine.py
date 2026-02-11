@@ -53,6 +53,20 @@ class LumeEngine:
                         'impact': rule.get('impact', 'Gathered information about the target system')
                     }
         
+        # Smart fallback: If we have a target but no pattern match, try to infer intent
+        if target:
+            # Check for common keywords
+            if any(word in instruction for word in ['scan', 'check', 'test', 'find', 'discover']):
+                # Default to nmap for scanning
+                return {
+                    'tool': 'nmap',
+                    'command': f'nmap -sV -T4 {target}',
+                    'description': 'Scan target for open ports and services',
+                    'warning': 'Port scanning may trigger IDS/IPS systems. Ensure you have authorization.',
+                    'summary': 'Performed a service and version scan on the target',
+                    'impact': 'Identified open ports and detected running network services for further analysis'
+                }
+        
         return None
     
     def _extract_target(self, instruction: str) -> Optional[str]:
