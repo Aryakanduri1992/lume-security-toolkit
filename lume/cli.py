@@ -5,12 +5,6 @@ Lume CLI - Main entry point
 
 import sys
 import argparse
-from lume.core.engine import LumeEngine
-from lume.core.legacy_adapter import LegacyAdapter
-from lume.core.plugin_registry import PluginRegistry
-from lume.utils.display import Display
-from lume.ml.normalizer import MLNormalizer
-from lume import __version__
 
 
 def main():
@@ -46,8 +40,8 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     parser.add_argument(
         '--version',
-        action='version',
-        version=f'Lume Security Toolkit v{__version__}'
+        action='store_true',
+        help='Show version information'
     )
     
     parser.add_argument(
@@ -96,6 +90,17 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     args = parser.parse_args()
     
+    # Handle version flag early (before imports)
+    if args.version:
+        from lume import __version__
+        print(f'Lume Security Toolkit v{__version__}')
+        sys.exit(0)
+    
+    # Lazy import heavy modules only when needed
+    from lume.core.engine import LumeEngine
+    from lume.core.legacy_adapter import LegacyAdapter
+    from lume.utils.display import Display
+    
     display = Display()
     engine = LumeEngine()
     
@@ -109,6 +114,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     # List plugins if requested (v0.4.0)
     if args.list_plugins:
+        from lume.core.plugin_registry import PluginRegistry
         registry = PluginRegistry()
         plugins = registry.list_all()
         display.info(f"Available plugins ({len(plugins)}):")
@@ -118,6 +124,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     # Show plugin info if requested (v0.4.0)
     if args.plugin_info:
+        from lume.core.plugin_registry import PluginRegistry
         registry = PluginRegistry()
         plugin = registry.get(args.plugin_info)
         if not plugin:
@@ -159,6 +166,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         ml_metadata = None
         if args.ml_normalize:
             # Lazy load ML normalizer only when needed
+            from lume.ml.normalizer import MLNormalizer
             ml_normalizer = MLNormalizer(rule_engine=engine)
             
             if not ml_normalizer.is_available():
