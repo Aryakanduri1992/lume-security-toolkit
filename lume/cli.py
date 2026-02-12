@@ -99,8 +99,8 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     display = Display()
     engine = LumeEngine()
     
-    # Initialize plugin system (v0.4.0)
-    adapter = LegacyAdapter()
+    # Initialize plugin system (v0.4.0) - reuse engine instance
+    adapter = LegacyAdapter(engine=engine)
     registry = PluginRegistry()
     
     # Initialize ML normalizer (with rule engine for validation)

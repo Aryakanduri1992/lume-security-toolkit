@@ -23,9 +23,9 @@ class LegacyAdapter:
     Users see no difference in behavior.
     """
     
-    def __init__(self):
+    def __init__(self, engine: LumeEngine = None):
         """Initialize adapter with engine and registry."""
-        self.engine = LumeEngine()
+        self.engine = engine or LumeEngine()
         self.registry = PluginRegistry()
     
     def parse_and_execute(self, instruction: str, dry_run: bool = False) -> Dict:
