@@ -219,6 +219,13 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         display.info("Executing command...")
         result = adapter.parse_and_execute(args.instruction, dry_run=False)
         
+        # Display command output
+        if result.get('output'):
+            print(result['output'])
+        
+        if result.get('error') and not result['success']:
+            display.error(f"Command failed: {result['error']}")
+        
         # Show post-execution summary
         if result['success']:
             display.show_summary(result)
