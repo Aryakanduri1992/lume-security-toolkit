@@ -101,7 +101,6 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     # Initialize plugin system (v0.4.0) - reuse engine instance
     adapter = LegacyAdapter(engine=engine)
-    registry = PluginRegistry()
     
     # Initialize ML normalizer (with rule engine for validation)
     ml_normalizer = MLNormalizer(rule_engine=engine)
@@ -113,6 +112,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     # List plugins if requested (v0.4.0)
     if args.list_plugins:
+        registry = PluginRegistry()
         plugins = registry.list_all()
         display.info(f"Available plugins ({len(plugins)}):")
         for plugin_name in plugins:
@@ -121,6 +121,7 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     
     # Show plugin info if requested (v0.4.0)
     if args.plugin_info:
+        registry = PluginRegistry()
         plugin = registry.get(args.plugin_info)
         if not plugin:
             display.error(f"Plugin not found: {args.plugin_info}")

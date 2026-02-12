@@ -12,6 +12,8 @@ from lume.core.smart_engine import SmartEngine
 
 
 class LumeEngine:
+    _rules_cache = None  # Class-level cache for rules
+    
     def __init__(self):
         self.rules = self._load_rules()
         self.log_file = Path.home() / '.lume' / 'history.log'
@@ -26,10 +28,14 @@ class LumeEngine:
         return self._smart_engine
     
     def _load_rules(self) -> Dict:
-        """Load command mapping rules from JSON file"""
+        """Load command mapping rules from JSON file (with caching)"""
+        if LumeEngine._rules_cache is not None:
+            return LumeEngine._rules_cache
+        
         rules_path = Path(__file__).parent.parent / 'data' / 'rules.json'
         with open(rules_path, 'r') as f:
-            return json.load(f)
+            LumeEngine._rules_cache = json.load(f)
+        return LumeEngine._rules_cache
     
     def parse_instruction(self, instruction: str) -> Optional[Dict]:
         """

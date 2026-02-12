@@ -19,13 +19,14 @@ class PluginRegistry:
     
     Design:
     - Dictionary-based storage
-    - Explicit registration only (no auto-discovery)
+    - Lazy initialization (only when needed)
     - Validation on registration
     - Internal plugins only (no external loading)
     """
     
     _plugins: Dict[str, BasePlugin] = {}
     _initialized: bool = False
+    _initializing: bool = False  # Prevent recursive initialization
     
     @classmethod
     def register(cls, plugin: BasePlugin) -> None:
@@ -139,8 +140,9 @@ class PluginRegistry:
     @classmethod
     def initialize(cls) -> None:
         """
-        Initialize built-in plugins.
+        Initialize built-in plugins lazily.
         
+        Only loads plugins when first accessed.
         Registers all 7 core plugins:
         - nmap
         - gobuster
@@ -150,10 +152,12 @@ class PluginRegistry:
         - metasploit
         - whatweb
         """
-        if cls._initialized:
+        if cls._initialized or cls._initializing:
             return
         
-        # Import and register plugins
+        cls._initializing = True
+        
+        # Import and register plugins (lazy import for speed)
         try:
             from lume.plugins.nmap import NmapPlugin
             from lume.plugins.gobuster import GobusterPlugin
@@ -171,11 +175,12 @@ class PluginRegistry:
             cls.register(MetasploitPlugin())
             cls.register(WhatwebPlugin())
             
-            cls._initialized = True
-            
-        except ImportError as e:
+        except ImportError:
             # Plugins not yet implemented - this is OK during development
             pass
+        finally:
+            cls._initialized = True
+            cls._initializing = False
     
     @classmethod
     def reset(cls) -> None:
