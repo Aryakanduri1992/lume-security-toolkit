@@ -102,9 +102,6 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
     # Initialize plugin system (v0.4.0) - reuse engine instance
     adapter = LegacyAdapter(engine=engine)
     
-    # Initialize ML normalizer (with rule engine for validation)
-    ml_normalizer = MLNormalizer(rule_engine=engine)
-    
     # List tools if requested
     if args.list_tools:
         display.list_tools(engine.get_supported_tools())
@@ -161,6 +158,9 @@ For more information: https://github.com/Aryakanduri1992/lume-security-toolkit
         # ML Normalization (if enabled)
         ml_metadata = None
         if args.ml_normalize:
+            # Lazy load ML normalizer only when needed
+            ml_normalizer = MLNormalizer(rule_engine=engine)
+            
             if not ml_normalizer.is_available():
                 display.warning("ML normalization requested but spaCy is not available")
                 display.info("Install with: python -m spacy download en_core_web_sm")

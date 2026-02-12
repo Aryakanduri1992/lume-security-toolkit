@@ -13,12 +13,14 @@ from lume.core.smart_engine import SmartEngine
 
 class LumeEngine:
     _rules_cache = None  # Class-level cache for rules
+    _compiled_patterns = {}  # Cache compiled regex patterns
     
     def __init__(self):
         self.rules = self._load_rules()
         self.log_file = Path.home() / '.lume' / 'history.log'
         self._ensure_log_directory()
         self._smart_engine = None  # Lazy load only when needed
+        self._compile_patterns()  # Pre-compile regex for speed
     
     @property
     def smart_engine(self):
@@ -36,6 +38,24 @@ class LumeEngine:
         with open(rules_path, 'r') as f:
             LumeEngine._rules_cache = json.load(f)
         return LumeEngine._rules_cache
+    
+    def _compile_patterns(self):
+        """Pre-compile regex patterns for faster matching"""
+        if LumeEngine._compiled_patterns:
+            return  # Already compiled
+        
+        for rule in self.rules['rules']:
+            tool = rule['tool']
+            if tool not in LumeEngine._compiled_patterns:
+                LumeEngine._compiled_patterns[tool] = []
+            
+            for pattern in rule['patterns']:
+                try:
+                    compiled = re.compile(pattern, re.IGNORECASE)
+                    LumeEngine._compiled_patterns[tool].append(compiled)
+                except re.error:
+                    # Skip invalid patterns
+                    pass
     
     def parse_instruction(self, instruction: str) -> Optional[Dict]:
         """
@@ -59,17 +79,33 @@ class LumeEngine:
         
         # Stage 1: Fast pattern matching (most common case)
         for rule in self.rules['rules']:
-            for pattern in rule['patterns']:
-                if re.search(pattern, instruction, re.IGNORECASE):
-                    command = self._build_command(rule, target, instruction)
-                    return {
-                        'tool': rule['tool'],
-                        'command': command,
-                        'description': rule['description'],
-                        'warning': rule.get('warning', 'This command will interact with the target system.'),
-                        'summary': rule.get('summary', 'Executed security testing command'),
-                        'impact': rule.get('impact', 'Gathered information about the target system')
-                    }
+            tool = rule['tool']
+            # Use pre-compiled patterns if available
+            if tool in LumeEngine._compiled_patterns:
+                for compiled_pattern in LumeEngine._compiled_patterns[tool]:
+                    if compiled_pattern.search(instruction):
+                        command = self._build_command(rule, target, instruction)
+                        return {
+                            'tool': rule['tool'],
+                            'command': command,
+                            'description': rule['description'],
+                            'warning': rule.get('warning', 'This command will interact with the target system.'),
+                            'summary': rule.get('summary', 'Executed security testing command'),
+                            'impact': rule.get('impact', 'Gathered information about the target system')
+                        }
+            else:
+                # Fallback to original pattern matching
+                for pattern in rule['patterns']:
+                    if re.search(pattern, instruction, re.IGNORECASE):
+                        command = self._build_command(rule, target, instruction)
+                        return {
+                            'tool': rule['tool'],
+                            'command': command,
+                            'description': rule['description'],
+                            'warning': rule.get('warning', 'This command will interact with the target system.'),
+                            'summary': rule.get('summary', 'Executed security testing command'),
+                            'impact': rule.get('impact', 'Gathered information about the target system')
+                        }
         
         # Stage 2: Smart engine for complex/ambiguous queries
         intent = self.smart_engine.detect_intent(instruction)
